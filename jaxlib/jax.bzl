@@ -166,9 +166,10 @@ def jax_test(
         ]
         test_tags = list(tags) + ["jax_test_%s" % backend] + backend_tags.get(backend, [])
         if disable_backends and backend in disable_backends:
-            test_tags += ["manual"]
+            test_tags.append("manual")
         if backend == "gpu":
             test_tags += tf_cuda_tests_tags()
+            deps.append("//jaxlib/cuda:cuda_gpu_support")
         native.py_test(
             name = name + "_" + backend,
             srcs = srcs,
